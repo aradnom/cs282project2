@@ -69,10 +69,10 @@ namespace simphys {
          angacc.setX(0.0f);
          angacc.setY(0.0f);
          angacc.setZ(0.0f);
-         orientation.setX(1.0f);
-         orientation.setY(1.0f);
-         orientation.setZ(1.0f);
-         orientation.setW(1.0f);
+         orientation.setX(0.0f);
+         orientation.setY(0.0f);
+         orientation.setZ(0.0f);
+         orientation.setW(1.0f); // This is "neutral"
          inertiaTensor[0]=2.5f;
          inertiaTensor[1]=0;
          inertiaTensor[2]=0;
@@ -86,23 +86,13 @@ namespace simphys {
          mass=1.0f;
          invMass=1.0f;
        }
-       void setaVel(vec3 in) {
-         angvel=in;
-       }
-       void getaVel(vec3 &out) {
-         out=angvel;
-       }
-       void setaAcc(vec3 in) {
-         angacc=in;
-       }
-       void getaAcc(vec3 &out) {
-         out=angacc;
-       }
     
     // setters
     void setPosition(const vec3& newPos);
     void setVelocity(const vec3& newVel);
+    void setAngVelocity( const vec3& newVel );
     void setAcceleration(const vec3& newAcc);
+    void setAngAcceleration( const vec3& newAcc );
     void setDamping(float d);
     void setMass(float m);
 
@@ -110,7 +100,9 @@ namespace simphys {
     vec3 getPosition() const;
     Quaternion* getOrientation();
     vec3 getVelocity() const;
+    vec3 getAngVelocity() const;
     vec3 getAcceleration() const;
+    vec3 getAngAcceleration() const;
     float getDamping() const;
     float getMass() const;    
 

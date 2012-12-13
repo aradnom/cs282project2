@@ -1,13 +1,14 @@
 #include "simphys/rigid_body.h"
-
 #include "simphys/vec3.h"
-
+#include <iostream>
 #include <memory>
 #include <chrono>
 
 typedef std::chrono::duration<float, std::ratio<1,1> > fseconds;
 
 // TODO - implement rigid body code here.
+
+using namespace std;
 
 namespace simphys {
   using std::shared_ptr;
@@ -22,8 +23,16 @@ namespace simphys {
     vel = newVel;
   }
 
+  void RigidBody::setAngVelocity(const vec3& newVel) {
+    angvel = newVel;
+  }
+
   void RigidBody::setAcceleration(const vec3& newAcc) {
     acc = newAcc;
+  }
+
+  void RigidBody::setAngAcceleration(const vec3& newAcc) {
+    angacc = newAcc;
   }
 
   void RigidBody::setDamping(float d) {
@@ -50,9 +59,17 @@ namespace simphys {
   vec3 RigidBody::getVelocity() const {
     return vel;
   }
+
+  vec3 RigidBody::getAngVelocity() const {
+    return angvel;
+  }
   
   vec3 RigidBody::getAcceleration() const {
     return acc;
+  }
+
+  vec3 RigidBody::getAngAcceleration() const {
+    return angacc;
   }
 
   float RigidBody::getDamping() const {
@@ -110,10 +127,19 @@ namespace simphys {
     //Position based on Velocity Verlet
     vec3 resultantAcc = angacc;
 
+    // Convert the angular velocity to a quaternion for MATHS
+    Quaternion vq( angvel ); 
+
+    // Do said maths
+    orientation = orientation + ( (0.5f * duration.count()) * vq * orientation );
+
     //update x, y, z as translation
-    orientation.setX(orientation.getX()+angvel.getX()*duration.count() + 0.5f*(resultantAcc.getX()*(duration.count()*duration.count())));
-    orientation.setY(orientation.getY()+angvel.getY()*duration.count() + 0.5f*(resultantAcc.getY()*(duration.count()*duration.count())));
-    orientation.setZ(orientation.getZ()+angvel.getZ()*duration.count() + 0.5f*(resultantAcc.getZ()*(duration.count()*duration.count())));
+    //orientation.setX( orientation.getX() + ( ( 0.5f * duration.count() ) * orientation.getX() * angvel.getX() ) );
+    //orientation.setY( orientation.getY() + ( ( 0.5f * duration.count() ) * orientation.getY() * angvel.getY() ) );
+    //orientation.setZ( orientation.getZ() + ( ( 0.5f * duration.count() ) * orientation.getZ() * angvel.getZ() ) );
+    //orientation.setX(orientation.getX()+angvel.getX()*duration.count() + 0.5f*(resultantAcc.getX()*(duration.count()*duration.count())));
+    //orientation.setY(orientation.getY()+angvel.getY()*duration.count() + 0.5f*(resultantAcc.getY()*(duration.count()*duration.count())));
+    //orientation.setZ(orientation.getZ()+angvel.getZ()*duration.count() + 0.5f*(resultantAcc.getZ()*(duration.count()*duration.count())));
     //pos = pos + vel*duration.count() + 0.5f*(resultantAcc*(duration.count()*duration.count()));
 
     // update velocity using Velocity Verlet
@@ -138,4 +164,5 @@ namespace simphys {
     angacc.setY(angacc.getY()+torque.getY()/inertiaTensor[4]);
     angacc.setZ(angacc.getZ()+torque.getZ()/inertiaTensor[8]);
   }
+
 }

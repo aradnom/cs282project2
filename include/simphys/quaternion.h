@@ -1,6 +1,8 @@
 #ifndef QUATERNION_H
 #define QUATERNION_H
 
+#include "vec3.h"
+
 namespace simphys {
   
   class Quaternion {
@@ -16,6 +18,8 @@ namespace simphys {
     , x{0.0f}
     , y{0.0f}
     , z{0.0f} { }
+
+    Quaternion ( const vec3 other ) : w( 0 ), x( other.getX() ), y( other.getY() ), z( other.getZ() ) {}
 
     Quaternion(float w_, float x_, float y_, float z_)
       : w{w_}
@@ -43,9 +47,20 @@ namespace simphys {
       Copy assignment operator.
     */
     Quaternion& operator=(const Quaternion& other);
+
+    Quaternion operator + ( const Quaternion& other );
+
+    Quaternion operator * ( const Quaternion& other );
   };
 
-  // TODO - OTHER FUNCTIONS AS APPROPRIATE
+  inline simphys::Quaternion operator * ( const float s, const simphys::Quaternion& q ) {
+    return simphys::Quaternion(
+      q.getW() * s,
+      q.getX() * s,
+      q.getY() * s,
+      q.getZ() * s
+    );
+  }
 
 } // namespace simphys
 

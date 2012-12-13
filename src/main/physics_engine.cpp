@@ -15,25 +15,26 @@ namespace simphys {
     if (dt - lastTick > fseconds{0.0}) {
       lastTick = dt;
       auto objects = sw->getObjects();
+
       for (auto& obj : objects) {
-	auto p = obj->getState();
+        auto p = obj->getState();
 	
-	// really cheap way of testing for collisions with ground.
-	if (p->getPosition().getY() > 0.0f) {
-	  p->integrate(dt);
-	} 
-	p->integrateO(dt);
+        // really cheap way of testing for collisions with ground.
+        if (p->getPosition().getY() > 0.0f)
+          p->integrate(dt);	       
+
+	      p->integrateO(dt);
       }
     } 
   }
 
   shared_ptr<RigidBody> PhysicsEngine::getLink() {
-      auto objects = sw->getObjects();
-      for (auto& obj : objects) {
-	auto p = obj->getState();
+    auto objects = sw->getObjects();
+    for (auto& obj : objects) {
+	    auto p = obj->getState();
 	
-	return p;
-      }
+	    return p;
+    }
   }
 
   void PhysicsEngine::setSimWorld(shared_ptr<SimWorld> simworld) {

@@ -10,7 +10,6 @@ set(LIBRARY_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/lib)
 include_directories(
  ${PROJECT_SOURCE_DIR}/include
  ${PROJECT_SOURCE_DIR}/src/main
- ${PROJECT_SOURCE_DIR}/src/test
 )
 
 # build and link test program.

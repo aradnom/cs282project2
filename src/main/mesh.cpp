@@ -2,7 +2,6 @@
 #include "simphys/mesh.h"
 #include "simphys/rigid_body.h"
 #include "simphys/quaternion.h"
-
 #include <string>
 
 #include <GL/gl.h>
@@ -24,8 +23,6 @@ namespace simphys {
     float x = pos.getX();
     float y = pos.getY();
     float z = pos.getZ();
-
-
 
     /*
       TODO 
@@ -57,11 +54,17 @@ namespace simphys {
     glTranslatef(x,y,z);
 
     //convert quaternion to axis angle
-    angle = acos(temp->getW())*2;
+    angle = ( ( acos( temp->getW() ) * 2 ) * 180 ) / M_PI;
+    x_axis = temp->getX() / sqrt( 1 - ( temp->getW() * temp->getW() ) );
+    y_axis = temp->getY() / sqrt( 1 - ( temp->getW() * temp->getW() ) );
+    z_axis = temp->getZ() / sqrt( 1 - ( temp->getW() * temp->getW() ) );
+
+    /*angle = acos(temp->getW())*2;
     x_axis = temp->getX()/sin(angle/2);
     y_axis = temp->getY()/sin(angle/2);
     z_axis = temp->getZ()/sin(angle/2);
-    angle = (angle*90) / 3.14159265f;
+    angle = (angle*180) / 3.14159265f;*/
+
     glRotatef(angle, x_axis, y_axis, z_axis);
 
     /* 
