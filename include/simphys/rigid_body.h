@@ -2,8 +2,9 @@
 #define RIGID_BODY_H
 
 // TODO - provide appropriate headers
-#include "quaternion.h"
-#include "vec3.h"
+#include "simphys/quaternion.h"
+#include "simphys/vec3.h"
+#include "simphys/mat33.h"
 
 #include <chrono>
 
@@ -39,6 +40,8 @@ namespace simphys {
        //array for holding intertia tensor
        float inertiaTensor[9];//stored within is actually the inverse of the intertia tensor
 
+       mat33 inverseTensor;
+
        // accumulated force for the current time step
        vec3 accumulatedForces;
 
@@ -72,19 +75,14 @@ namespace simphys {
          orientation.setX(0.0f);
          orientation.setY(0.0f);
          orientation.setZ(0.0f);
-         orientation.setW(1.0f); // This is "neutral"
-         inertiaTensor[0]=2.5f;
-         inertiaTensor[1]=0;
-         inertiaTensor[2]=0;
-         inertiaTensor[3]=0;
-         inertiaTensor[4]=2.5f;
-         inertiaTensor[5]=0;
-         inertiaTensor[6]=0;
-         inertiaTensor[7]=0;
-         inertiaTensor[8]=2.5f;
-         damping=1;
+         orientation.setW(1.0f); // This is "neutral"         
+         damping=0.999f;
          mass=1.0f;
          invMass=1.0f;
+         inverseTensor( 0, 0 ) = 2.5f; // Inverse values
+         inverseTensor( 1, 1 ) = 2.5f;
+         inverseTensor( 2, 2 ) = 2.5f;
+
        }
     
     // setters

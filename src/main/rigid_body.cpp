@@ -1,5 +1,6 @@
 #include "simphys/rigid_body.h"
 #include "simphys/vec3.h"
+#include "simphys/mat33.h"
 #include <iostream>
 #include <memory>
 #include <chrono>
@@ -159,10 +160,21 @@ namespace simphys {
   void RigidBody::applyForce(const vec3& force) {
     accumulatedForces = accumulatedForces + force;
   }
+
   void RigidBody::applyTorque(const vec3 &point, const vec3& torque) {
-    angacc.setX(angacc.getX()+torque.getX()/inertiaTensor[0]);
+    mat33 rotationMatrix = orientation.getMatrix(); // Get rotation matrix from orientation
+    mat33 rotationTranspose = orientation.getMatrix();
+    rotationTranspose.transpose();
+
+    // The tensor in world coordinates
+    mat33 worldTensor = rotationMatrix * inverseTensor;
+    worldTensor = worldTensor * rotationTranspose;
+
+    worldTensor.print();
+
+    /*angacc.setX(angacc.getX()+torque.getX()/inertiaTensor[0]);
     angacc.setY(angacc.getY()+torque.getY()/inertiaTensor[4]);
-    angacc.setZ(angacc.getZ()+torque.getZ()/inertiaTensor[8]);
+    angacc.setZ(angacc.getZ()+torque.getZ()/inertiaTensor[8]);*/
   }
 
 }

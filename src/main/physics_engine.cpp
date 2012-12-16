@@ -20,7 +20,7 @@ namespace simphys {
         auto p = obj->getState();
 	
         // really cheap way of testing for collisions with ground.
-        if (p->getPosition().getY() > 0.0f)
+        //if (p->getPosition().getY() > 0.0f) // Disabled for debugging
           p->integrate(dt);	       
 
 	      p->integrateO(dt);
