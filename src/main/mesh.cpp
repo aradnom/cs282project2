@@ -2,11 +2,17 @@
 #include "simphys/mesh.h"
 #include "simphys/rigid_body.h"
 #include "simphys/quaternion.h"
+#include "simphys/tga.h"
 #include <string>
+#include <iostream>
 
 #include <GL/gl.h>
 
 namespace simphys {
+
+  Mesh::Mesh () {
+    texture_id = load_texture_TGA( "../tex/wall.tga", NULL, NULL, GL_REPEAT, GL_REPEAT );
+  }
 
   void Mesh::setOwner(shared_ptr<SimObject3D> newOwner) {
     owner = newOwner;
@@ -42,8 +48,26 @@ namespace simphys {
 
     // You can ignore these lines - they set up drawing a sphere.
     GLUquadricObj *obj = gluNewQuadric();
-    gluQuadricNormals(obj, GLU_SMOOTH);
-    gluQuadricTexture(obj, GL_TRUE);
+    gluQuadricNormals( obj, GLU_SMOOTH );
+    gluQuadricTexture( obj, GL_TRUE );
+    gluQuadricDrawStyle( obj, GLU_FILL );    
+    gluQuadricOrientation( obj, GLU_OUTSIDE );
+
+    glEnable ( GL_CULL_FACE );
+
+    //glPixelStorei( GL_UNPACK_ALIGNMENT, 1 );
+
+    //glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT );
+    //glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT );
+    //glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+    //glTexParameteri( GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR );
+
+    glTexEnvf( GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL );
+
+    //glTexImage2D( GL_TEXTURE_2D, 0, GL_RGB, 256, 256, 0, GL_RGB, GL_UNSIGNED_BYTE, '' );
+
+    glEnable( GL_TEXTURE_2D );
+    glBindTexture( GL_TEXTURE_2D, texture_id );
 
     // save state
     glPushMatrix();
@@ -97,7 +121,8 @@ namespace simphys {
       and fourth arguments are the number of subdivisions along
       latitude and longitude.
      */
-    gluSphere(obj, 1.001f, 8, 8);
+
+    gluSphere(obj, 1.00f, 12, 12);
 
     // restore state
     glPopMatrix();

@@ -163,8 +163,8 @@ namespace simphys {
   
   // Constructor
   RenderEngine::RenderEngine()
-    : windowHeight{480}
-    , windowWidth{640}
+    : windowHeight{600}
+    , windowWidth{800}
     , sw{nullptr} { }
 
   // Initialize the rendering engine.

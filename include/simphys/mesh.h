@@ -15,8 +15,11 @@ namespace simphys {
   class Mesh {
   private:
     shared_ptr<SimObject3D> owner;
+    GLuint texture_id;
     
   public:
+    Mesh();
+
     /*
       Set the owner of this sprite.
     */
@@ -26,6 +29,7 @@ namespace simphys {
       Code responsible for drawing the mesh to the screen.
     */
     void draw() const;
+
   };
 
 }
