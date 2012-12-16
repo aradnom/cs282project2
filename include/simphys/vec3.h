@@ -70,6 +70,9 @@ namespace simphys {
      */
     vec3 crossProduct(const vec3& other) const;
 
+    // Print the contents of the vector
+    void print();
+
     /*
       Getters and setters for the member variables.
     */

@@ -6,7 +6,7 @@
 
 #include <cmath>
 #include <string>
-
+#include <iostream>
 #include "simphys/vec3.h"
 
 simphys::vec3::vec3(float x_, float y_ , float z_ ) 
@@ -60,6 +60,10 @@ simphys::vec3 simphys::vec3::crossProduct(const simphys::vec3& other) const {
   return vec3(y * other.getZ() - z * other.getY(), 
 	      z * other.getX() - x * other.getZ(), 
 	      x * other.getY() - y * other.getX());
+}
+
+void simphys::vec3::print () {
+  std::cout << x << " " << y << " " << z << "\n";
 }
 
 float simphys::vec3::getX() const {

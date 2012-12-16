@@ -126,7 +126,7 @@ namespace simphys {
   void RigidBody::integrateO(fseconds duration) {
 
     //Position based on Velocity Verlet
-    vec3 resultantAcc = angacc;
+    vec3 resultantAcc = angacc + accumulatedTorques;
 
     // Convert the angular velocity to a quaternion for MATHS
     Quaternion vq( angvel ); 
@@ -155,13 +155,19 @@ namespace simphys {
 
   void RigidBody::clearForces() {
     accumulatedForces = vec3{0.0f, 0.0f, 0.0f};
+    //accumulatedTorques = vec3{0.0f, 0.0f, 0.0f};
   }
 
   void RigidBody::applyForce(const vec3& force) {
     accumulatedForces = accumulatedForces + force;
   }
 
-  void RigidBody::applyTorque(const vec3 &point, const vec3& torque) {
+  void RigidBody::applyTorque( const vec3 &point, const vec3& force ) {
+    // Calculate the force to be applied
+    vec3 distance = ( point - pos );
+    vec3 appliedForce = distance.crossProduct( force );
+
+    // Next calculate the inertia tensor
     mat33 rotationMatrix = orientation.getMatrix(); // Get rotation matrix from orientation
     mat33 rotationTranspose = orientation.getMatrix();
     rotationTranspose.transpose();
@@ -170,7 +176,7 @@ namespace simphys {
     mat33 worldTensor = rotationMatrix * inverseTensor;
     worldTensor = worldTensor * rotationTranspose;
 
-    worldTensor.print();
+    accumulatedTorques = accumulatedTorques + ( worldTensor * appliedForce );
 
     /*angacc.setX(angacc.getX()+torque.getX()/inertiaTensor[0]);
     angacc.setY(angacc.getY()+torque.getY()/inertiaTensor[4]);

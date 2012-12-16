@@ -45,6 +45,8 @@ namespace simphys {
        // accumulated force for the current time step
        vec3 accumulatedForces;
 
+       vec3 accumulatedTorques;
+
        // Damping parameter 
        float damping;
     public:
@@ -60,6 +62,9 @@ namespace simphys {
          accumulatedForces.setX(0.0f);
          accumulatedForces.setY(0.0f);
          accumulatedForces.setZ(0.0f);
+         accumulatedTorques.setX(0.0f);
+         accumulatedTorques.setY(0.0f);
+         accumulatedTorques.setZ(0.0f);
          vel.setX(0.0f);
          vel.setY(0.0f);
          vel.setZ(0.0f);
@@ -117,7 +122,7 @@ namespace simphys {
     void applyForce(const vec3& force);
 
     // Apply a torque to this rigid body at the given point
-    void applyTorque(const vec3 &point, const vec3& torque);
+    void applyTorque( const vec3 &point, const vec3& force );
   };
 
   // TODO - provide necessary non-member functions.
